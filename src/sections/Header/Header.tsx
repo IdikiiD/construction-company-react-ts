@@ -1,18 +1,18 @@
 import logo from '../../img/header/logo.png'
 
 export const Header = () => (
-    <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className=" w-full mx-auto px-10 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+    <header className="bg-white shadow-md sticky top-0 z-50 w-full">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-10 py-4 flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-6">
 
 
-            {/* Логотип */}
-            <div className="text-2xl font-bold shrink-0">
+        {/* Логотип */}
+            <div className="flex flex-col items-center md:flex-row md:items-center  gap-2 ">
                 <div className="h-12 w-32 bg-gray-200 flex items-center justify-center rounded">
                     <img src={logo} alt="Logo" className="h-12 w-auto" />
                 </div>
-
+                <p className="text-sm md:text-sm max-w-[250px] leading-tight text-center md:text-left ">Остекление балконов и лоджий в Москве и Московской области</p>
             </div>
-            <p className="text-xs  ">Остекление балконов и лоджий в Москве и Московской области</p>
+
 
             {/* Кнопка */}
             <button
