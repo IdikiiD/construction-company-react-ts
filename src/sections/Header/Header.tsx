@@ -1,56 +1,37 @@
+import logo from '../../img/header/logo.png'
+
 export const Header = () => (
-    <header className="h-[10rem] bg-white shadow-md">
-        <div className="grid grid-cols-12 items-center h-[10rem] max-w-7xl mx-auto px-4">
+    <header className="bg-white shadow-md sticky top-0 z-50">
+        <div className=" w-full mx-auto px-10 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
 
-            {/* LOGO */}
-            <div className="col-span-5 flex items-center">
-                LOGO
-            </div>
 
-            {/* BUTTON */}
-            <div className="col-span-2 flex items-center justify-center">
-                <button
-                    className="
-            bg-white
-            border-2 border-[#55a831]
-            rounded-[1rem]
-            text-[1.4rem] leading-[1.2]
-            font-bold
-            text-[#55a831]
-            py-4 px-4 pl-20
-            bg-no-repeat
-          "
-                    style={{
-                        backgroundImage: 'url(/assets/img/header/edit.png)',
-                        backgroundPosition: '1rem center'
-                    }}
-                >
-                    Вызвать<br />замерщика
-                </button>
-            </div>
-
-            {/* HOURS */}
-            <div className="col-span-2 flex items-center gap-8">
-                <img />
-                <p className="text-[1.4rem] text-[#333] leading-[1.2]">
-                    без выходных
-                    <br />
-                    <span className="block text-[1.8rem] font-bold">
-            9:00 - 18:00
-          </span>
-                </p>
-            </div>
-
-            {/* CONTACTS */}
-            <div className="col-span-3 flex items-center justify-end text-right">
-                <div className="leading-[1.7]">
-                    <a className="block text-[2.3rem] font-bold text-[#333]">
-                        📞 +7 (495) 646-61-71
-                    </a>
-                    <a className="block text-[1.5rem] text-[#0089cd] underline cursor-pointer">
-                        Заказать обратный звонок
-                    </a>
+            {/* Логотип */}
+            <div className="text-2xl font-bold shrink-0">
+                <div className="h-12 w-32 bg-gray-200 flex items-center justify-center rounded">
+                    <img src={logo} alt="Logo" className="h-12 w-auto" />
                 </div>
+
+            </div>
+            <p className="text-xs  ">Остекление балконов и лоджий в Москве и Московской области</p>
+
+            {/* Кнопка */}
+            <button
+                className="bg-white border-2 border-green-600 rounded-lg text-green-600 font-bold px-6 py-3
+                   text-lg leading-snug shrink-0"
+            >
+                📝 Вызвать<br/>замерщика
+            </button>
+
+            {/* Часы */}
+            <div className="text-center text-base md:text-left shrink-0">
+                без выходных<br/>
+                <span className="font-bold text-lg">9:00 - 18:00</span>
+            </div>
+
+            {/* Контакты */}
+            <div className="text-center md:text-right shrink-0">
+                <a href="tel:+74956466171" className="block font-bold text-xl">📞 +7 (495) 646-61-71</a>
+                <a className="block text-blue-600 underline cursor-pointer text-base">Заказать обратный звонок</a>
             </div>
 
         </div>
