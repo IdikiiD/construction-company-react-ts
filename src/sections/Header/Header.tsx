@@ -1,7 +1,7 @@
 import logo from '../../img/header/logo.png'
 
 export const Header = () => (
-    <header className="bg-white shadow-md sticky top-0 z-50 w-full">
+    <header className="bg-white shadow-md  top-0 z-50 w-full">
         <div className="max-w-[1400px] mx-auto px-4 md:px-10 py-4 flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-6">
 
 
