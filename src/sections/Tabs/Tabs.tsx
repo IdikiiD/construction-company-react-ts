@@ -2,8 +2,8 @@ import {useState, useEffect} from "react";
 import {tabData} from "../../data/tabData.tsx";
 
 
-export const Tabs = ({onClose, onClick}: { onClose?: () => void, onClick?: () => void}) => {
-    const [activeTab, setActiveTab] = useState<string>('1');
+export const Tabs = ({onClose, onClick, index}: { onClose?: () => void, onClick?: () => void, index:string}) => {
+    const [activeTab, setActiveTab] = useState<string>(index);
 
     // Блокируем скролл body при монтировании компонента
     useEffect(() => {
