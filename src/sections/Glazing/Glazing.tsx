@@ -1,109 +1,44 @@
 import {glazingTypes} from "../../data/glazingTypes";
 import type {GlazingType} from "../../../types/glazingType.ts";
-import {useRef, useState, useEffect} from "react";
+import {useState} from "react";
+import {Tabs} from "../Tabs/Tabs.tsx";
+import {handleSubmit} from "../../utils/handleSubmit.ts";
+
+import {useCarousel} from "../../hooks/UseCarousel.ts";
+import {useMobile} from "../../hooks/UseMobile.ts";
+
 
 export const Glazing = () => {
-    const carouselRef = useRef<HTMLDivElement>(null);
-    const [isMobile, setIsMobile] = useState<boolean>(false);
-    const [scrollPosition, setScrollPosition] = useState<number>(0);
+    const { carouselRef, activeCard, handleScroll, scrollLeft, scrollRight, handleCardClick } = useCarousel({ initialIndex: 2 });
 
-    // activeCard - индекс активной карточки (0, 1, 2, 3, 4)
-    const [activeCard, setActiveCard] = useState<number>(0); // Изменено: убрал null, начинаем с 0
+    const isMobile= useMobile(1300);
 
-    // activeVariant - тип активного таба ('cold', 'warm', 'plastic', 'wood', 'aluminum')
+
+
+    const [showTabs, setShowTabs] = useState<boolean>(false);
+
+
+
+
     const [activeVariant, setActiveVariant] = useState<string>('cold');
 
-    // Проверка ширины экрана
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 1300);
-        };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
 
-    // ===================================================================
-    // ПОЛУЧЕНИЕ ДАННЫХ АКТИВНОЙ КАРТОЧКИ
-    // ===================================================================
 
-    // Берём активную карточку по индексу
+
+
     const activeGlazingType = glazingTypes[activeCard];
 
-    // Достаём массив доступных вариантов для этой карточки
+
     const availableVariants = activeGlazingType.variants;
 
-    // Ищем все возможные варианты
+
     const coldVariant = availableVariants.find(v => v.type === 'cold');
     const warmVariant = availableVariants.find(v => v.type === 'warm');
     const plasticVariant = availableVariants.find(v => v.type === 'plastic');
     const woodVariant = availableVariants.find(v => v.type === 'wood');
     const aluminumVariant = availableVariants.find(v => v.type === 'aluminum');
 
-    // ===================================================================
-    // ОБРАБОТЧИКИ
-    // ===================================================================
 
-    // Обработчик скролла для отслеживания позиции
-    const handleScroll = () => {
-        if (!carouselRef.current) return;
-        const card = carouselRef.current.children[0] as HTMLElement;
-        if (!card) return;
-
-        const gap = 16;
-        const cardWidth = card.offsetWidth + gap;
-        const currentScroll = carouselRef.current.scrollLeft;
-        const newPosition = Math.round(currentScroll / cardWidth);
-
-        setScrollPosition(newPosition);
-        setActiveCard(newPosition);
-    };
-
-    const scrollToIndex = (index: number) => {
-        if (!carouselRef.current) return;
-        const card = carouselRef.current.children[0] as HTMLElement;
-        if (!card) return;
-
-        const gap = 16;
-        const scrollLeft = index * (card.offsetWidth + gap);
-
-        carouselRef.current.scrollTo({left: scrollLeft, behavior: "smooth"});
-        setScrollPosition(index);
-        setActiveCard(index);
-    };
-
-    // Прокрутка стрелками
-    const scrollLeft = () => {
-        if (scrollPosition > 0) {
-            scrollToIndex(scrollPosition - 1);
-        }
-    };
-
-    const scrollRight = () => {
-        if (scrollPosition < glazingTypes.length - 1) {
-            scrollToIndex(scrollPosition + 1);
-        }
-    };
-
-    // Клик на карточку
-    const handleCardClick = (index: number) => {
-        console.log('🖱️ Клик на карточку:', glazingTypes[index].title);
-
-        // Устанавливаем активную карточку
-        setActiveCard(index);
-        scrollToIndex(index);
-
-        // Автоматически выбираем первый доступный вариант
-        const newGlazingType = glazingTypes[index];
-        const firstVariant = newGlazingType.variants[0];
-        setActiveVariant(firstVariant.type);
-
-        console.log('🔄 Автоматически выбран таб:', firstVariant.type);
-    };
-
-    // ===================================================================
-    // RENDER
-    // ===================================================================
 
     return (
         <div className="py-12 bg-white">
@@ -200,10 +135,10 @@ export const Glazing = () => {
                 <div className={`grid gap-6 ${
                     // Подсчитываем сколько вариантов доступно
                     availableVariants.length === 1
-                        ? 'grid-cols-1 max-w-2xl mx-auto'  // Один вариант - одна колонка по центру
+                        ? 'grid-cols-1 max-w-2xl mx-auto'
                         : availableVariants.length === 2
-                            ? 'grid-cols-1 lg:grid-cols-2'  // Два варианта - две колонки
-                            : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'  // Три и более - три колонки
+                            ? 'grid-cols-1 lg:grid-cols-2'
+                            : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'
                 }`}>
 
                     {/* ===== ТАБ ХОЛОДНОГО ОСТЕКЛЕНИЯ ===== */}
@@ -230,8 +165,11 @@ export const Glazing = () => {
                                 <div className="space-y-3 mb-6">
                                     {coldVariant.features.map((feature, idx) => (
                                         <div key={idx} className="flex items-start">
-                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                                                 fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd"
+                                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                      clipRule="evenodd"/>
                                             </svg>
                                             <span className="text-gray-700 text-sm">{feature}</span>
                                         </div>
@@ -245,9 +183,17 @@ export const Glazing = () => {
                                     <div className="text-sm text-gray-600 mb-4">
                                         {coldVariant.priceNote}
                                     </div>
-                                    <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300">
-                                        РАССЧИТАТЬ СТОИМОСТЬ
-                                    </button>
+                                    <div>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setShowTabs(true);
+                                            }}
+                                            className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                                        >
+                                            РАССЧИТАТЬ СТОИМОСТЬ
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -277,8 +223,11 @@ export const Glazing = () => {
                                 <div className="space-y-3 mb-6">
                                     {warmVariant.features.map((feature, idx) => (
                                         <div key={idx} className="flex items-start">
-                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                                                 fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd"
+                                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                      clipRule="evenodd"/>
                                             </svg>
                                             <span className="text-gray-700 text-sm">{feature}</span>
                                         </div>
@@ -292,7 +241,13 @@ export const Glazing = () => {
                                     <div className="text-sm text-gray-600 mb-4">
                                         {warmVariant.priceNote}
                                     </div>
-                                    <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowTabs(true);
+                                        }}
+                                        className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                                    >
                                         РАССЧИТАТЬ СТОИМОСТЬ
                                     </button>
                                 </div>
@@ -324,8 +279,11 @@ export const Glazing = () => {
                                 <div className="space-y-3 mb-6">
                                     {plasticVariant.features.map((feature, idx) => (
                                         <div key={idx} className="flex items-start">
-                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                                                 fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd"
+                                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                      clipRule="evenodd"/>
                                             </svg>
                                             <span className="text-gray-700 text-sm">{feature}</span>
                                         </div>
@@ -339,7 +297,13 @@ export const Glazing = () => {
                                     <div className="text-sm text-gray-600 mb-4">
                                         {plasticVariant.priceNote}
                                     </div>
-                                    <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowTabs(true);
+                                        }}
+                                        className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                                    >
                                         РАССЧИТАТЬ СТОИМОСТЬ
                                     </button>
                                 </div>
@@ -371,8 +335,11 @@ export const Glazing = () => {
                                 <div className="space-y-3 mb-6">
                                     {woodVariant.features.map((feature, idx) => (
                                         <div key={idx} className="flex items-start">
-                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                                                 fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd"
+                                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                      clipRule="evenodd"/>
                                             </svg>
                                             <span className="text-gray-700 text-sm">{feature}</span>
                                         </div>
@@ -386,7 +353,13 @@ export const Glazing = () => {
                                     <div className="text-sm text-gray-600 mb-4">
                                         {woodVariant.priceNote}
                                     </div>
-                                    <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowTabs(true);
+                                        }}
+                                        className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                                    >
                                         РАССЧИТАТЬ СТОИМОСТЬ
                                     </button>
                                 </div>
@@ -418,8 +391,11 @@ export const Glazing = () => {
                                 <div className="space-y-3 mb-6">
                                     {aluminumVariant.features.map((feature, idx) => (
                                         <div key={idx} className="flex items-start">
-                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                                            <svg className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                                                 fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd"
+                                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                      clipRule="evenodd"/>
                                             </svg>
                                             <span className="text-gray-700 text-sm">{feature}</span>
                                         </div>
@@ -433,7 +409,13 @@ export const Glazing = () => {
                                     <div className="text-sm text-gray-600 mb-4">
                                         {aluminumVariant.priceNote}
                                     </div>
-                                    <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowTabs(true);
+                                        }}
+                                        className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors duration-300"
+                                    >
                                         РАССЧИТАТЬ СТОИМОСТЬ
                                     </button>
                                 </div>
@@ -442,6 +424,19 @@ export const Glazing = () => {
                     )}
 
                 </div>
+
+                {/* Модальное окно с калькулятором */}
+                {showTabs && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-black/50" onClick={() => setShowTabs(false)}/>
+                        <div className="relative z-10">
+                            <Tabs onClose={() => setShowTabs(false)} onClick={() => {
+                                handleSubmit();
+                                setShowTabs(false)
+                            }}/>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
