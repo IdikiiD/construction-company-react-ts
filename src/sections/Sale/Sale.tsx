@@ -14,7 +14,7 @@ export const Sale = () => {
         scrollLeft,
         scrollRight,
         handleCardClick
-    } = useCarousel({initialIndex: 2});
+    } = useCarousel({initialIndex: 0});
 
 
     const activeSaleType = saleData[activeCard];
@@ -156,6 +156,7 @@ export const Sale = () => {
                                 <button
                                     type="submit"
                                     className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-6 rounded-lg uppercase transition-colors shadow-md"
+
                                 >
                                     ВЫЗВАТЬ ЗАМЕРЩИКА!
                                 </button>
