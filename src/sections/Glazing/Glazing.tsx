@@ -430,7 +430,7 @@ export const Glazing = () => {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         <div className="absolute inset-0 bg-black/50" onClick={() => setShowTabs(false)}/>
                         <div className="relative z-10">
-                            <Tabs onClose={() => setShowTabs(false)} onClick={() => {
+                            <Tabs onClose={() => setShowTabs(false)} index={'1'} onClick={() => {
                                 handleSubmit();
                                 setShowTabs(false)
                             }}/>
