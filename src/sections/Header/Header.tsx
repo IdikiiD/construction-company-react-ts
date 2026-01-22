@@ -1,6 +1,12 @@
 import logo from '../../img/header/logo.png'
+import {handleSubmit} from "../../utils/handleSubmit.ts";
+import {useState} from "react";
+import {TabsNumber} from "../../components/Modal/Modal.tsx";
 
-export const Header = () => (
+export const Header = () => {
+    const [showTabs, setShowTabs] = useState<boolean>(false);
+
+    return(
     <header className="bg-white shadow-md  top-0 z-50 w-full">
         <div className="max-w-[1400px] mx-auto px-4 md:px-10 py-4 flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-6">
 
@@ -16,6 +22,10 @@ export const Header = () => (
 
             {/* Кнопка */}
             <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTabs(true);
+                }}
                 className="bg-white border-2 border-green-600 rounded-lg text-green-600 font-bold px-6 py-3
                    text-lg leading-snug shrink-0"
             >
@@ -35,5 +45,19 @@ export const Header = () => (
             </div>
 
         </div>
+        {showTabs && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/50" onClick={() => setShowTabs(false)}/>
+                <div className="relative z-10">
+                    <TabsNumber onClose={() => setShowTabs(false)}  onClick={() => {
+                        handleSubmit();
+                        setShowTabs(false)
+                    }}/>
+                </div>
+            </div>
+        )}
+
     </header>
+
 );
+}
