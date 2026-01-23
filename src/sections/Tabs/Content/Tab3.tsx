@@ -1,4 +1,4 @@
-export const Tab3 = () => {
+export const Tab3 = ({register}:{ register: any }) => {
     return (
         <div>
             {/* Header */}
@@ -16,11 +16,13 @@ export const Tab3 = () => {
                 </h2>
                 <form className="space-y-4">
                     <input
+                        {...register('name', { required: true })}
                         type="text"
                         placeholder="Введите ваше имя"
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                     />
                     <input
+                        {...register('phone', { required: true })}
                         type="tel"
                         placeholder="Введите телефон"
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
