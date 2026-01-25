@@ -1,30 +1,44 @@
-import {useState, useEffect} from "react";
-import {tabData} from "../../data/tabData.tsx";
+import {useState} from "react";
+
+import {useForm} from "react-hook-form";
+import type {FormValues} from "../../types/TabType.ts";
+import {useLockBodyScroll} from "../../hooks/UseLockBodyScroll";
+import {useSendData} from "../../hooks/useSendData";
+import {tabData} from "../../data/tabData";
 
 
-export const TabsNumber = ({onClose, onClick}: { onClose?: () => void, onClick?: () => void, }) => {
+
+
+
+export const TabsNumber = ({onClose}: { onClose?: () => void }) => {
     const [activeTab] = useState<string>('3');
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>();
+    const { send, loading, error } = useSendData<{ success: boolean }>();
 
-    // Блокируем скролл body при монтировании компонента
-    useEffect(() => {
-        // Сохраняем текущую позицию скролла
-        const scrollY = window.scrollY;
+    useLockBodyScroll();
 
-        // Блокируем скролл
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
+    const onSubmit = async (data: FormValues) => {
+        try {
+            const result = await send({
+                url:  'http://localhost:3000/api/request',
+                body: {
+                    ...data,
+                    tabId: activeTab,
+                },
+            });
 
-        // Восстанавливаем скролл при размонтировании
-        return () => {
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
-            document.body.style.overflow = '';
-            window.scrollTo(0, scrollY);
-        };
-    }, []);
+            // Закрываем только если успешно
+            if (result?.success) {
+                onClose?.();
+            }
+        } catch (err) {
+            console.error('Ошибка отправки:', err);
+        }
+    };
+    const activeTabData = tabData.find(tab => tab.id === activeTab);
+
+
+
 
 
     return (
@@ -46,7 +60,12 @@ export const TabsNumber = ({onClose, onClick}: { onClose?: () => void, onClick?:
                         </button>
                     )}
                     <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden p-4 sm:p-6 md:p-8">
-                        {tabData.find((tab) => tab.id === activeTab)?.component}
+                        {activeTabData?.render({ register, setValue, errors })}
+                        {error && (
+                            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                                Произошла ошибка при отправке. Попробуйте еще раз.
+                            </div>
+                        )}
 
                         {/* Кнопки навигации */}
                         <div className="flex gap-2 sm:gap-4 mt-4 sm:mt-6 md:mt-8">
@@ -54,11 +73,18 @@ export const TabsNumber = ({onClose, onClick}: { onClose?: () => void, onClick?:
 
 
                             <button
-                                onClick={onClick}
+                                onClick={handleSubmit(onSubmit)}
+                                disabled={loading}
                                 className="flex-1 bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white font-bold text-sm sm:text-base py-2.5 sm:py-3 rounded-lg sm:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                             >
-                                <span className="hidden sm:inline">✓ Отправить</span>
-                                <span className="sm:hidden">✓</span>
+                                {loading ? (
+                                    <span>Отправка...</span>
+                                ) : (
+                                    <>
+                                        <span className="hidden sm:inline">✓ Отправить</span>
+                                        <span className="sm:hidden">✓</span>
+                                    </>
+                                )}
                             </button>
 
                         </div>
