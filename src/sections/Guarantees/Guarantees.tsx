@@ -1,5 +1,6 @@
-import {images} from "../../data/garanteesData.ts";
-import type {ExtendedImageType} from "../../../types/imageGuaranteesType.ts";
+
+import type {ExtendedImageType} from "../../types/imageGuaranteesType.ts";
+import {images} from "../../data/garanteesData";
 
 
 export const Guarantees = () => {
