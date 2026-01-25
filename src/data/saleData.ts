@@ -1,4 +1,4 @@
-import type {SaleType} from "../../types/saleType.ts";
+import type {SaleType} from "../types/saleType.ts";
 
 export const saleData: SaleType[] = [
     {
