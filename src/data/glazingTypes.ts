@@ -1,4 +1,4 @@
-import type {GlazingType} from "../../types/glazingType.ts";
+import type {GlazingType} from "../types/glazingType.ts";
 
 export const glazingTypes: GlazingType[] = [
     {
