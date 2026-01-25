@@ -1,32 +1,56 @@
-
-
-// ============================================
-// Tab2.tsx - Оптимизированная для мобильных
-// ============================================
 import {useState} from "react";
 import {Snowflake, Sun} from "lucide-react";
-import {glazingTypes} from "../../../data/glazingTypes.ts";
 
-export const Tab2 = () => {
+import type {TabRenderProps} from "../../../types/TabType.ts";
+import {glazingTypes} from "../../../data/glazingTypes";
+
+export const Tab2 = ({ register, setValue, errors }: TabRenderProps) => {
     const [selectedGlazingType, setSelectedGlazingType] = useState('');
     const [isCold, setIsCold] = useState(false);
     const [isWarm, setIsWarm] = useState(false);
 
-return (
+    return (
         <div>
+            <input
+                type="hidden"
+                {...register('glazingType', {
+                    required: 'Выберите тип остекления',
+                })}
+            />
+            <input
+                type="hidden"
+                {...register('option', {
+                    required: 'Выберите тип профиля',
+                })}
+            />
+
             {/* Header */}
             <div className="text-center mb-4 sm:mb-6">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-1 sm:mb-2">Тип остекления</h1>
-                <p className="text-gray-500 text-sm sm:text-base">Выберите тип остекления и его профиль</p>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-1 sm:mb-2">
+                    Тип остекления
+                </h1>
+                <p className="text-gray-500 text-sm sm:text-base">
+                    Выберите тип остекления и его профиль
+                </p>
             </div>
 
             {/* Glazing Type Dropdown */}
             <div className="mb-4 sm:mb-6">
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Тип остекления</label>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                    Тип остекления
+                </label>
                 <select
                     value={selectedGlazingType}
-                    onChange={(e) => setSelectedGlazingType(e.target.value)}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg sm:rounded-xl focus:border-indigo-500 focus:outline-none transition-colors text-base sm:text-lg bg-white cursor-pointer"
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        const value = e.target.value;
+                        setSelectedGlazingType(value);
+                        setValue('glazingType', value);
+                    }}
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 border-2 rounded-lg sm:rounded-xl focus:outline-none transition-colors text-base sm:text-lg bg-white cursor-pointer ${
+                        errors.glazingType
+                            ? 'border-red-500 focus:border-red-600'
+                            : 'border-gray-200 focus:border-indigo-500'
+                    }`}
                 >
                     <option value="">Выберите тип остекления</option>
                     {glazingTypes.map((type) => (
@@ -35,19 +59,32 @@ return (
                         </option>
                     ))}
                 </select>
+                {errors.glazingType && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-500">
+                        {errors.glazingType.message}
+                    </p>
+                )}
             </div>
 
             {/* Cold/Warm Options */}
             <div className="space-y-3 sm:space-y-4">
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Профиль</label>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                    Профиль
+                </label>
 
                 {/* Cold Option */}
                 <div
-                    onClick={() => setIsCold(!isCold)}
+                    onClick={() => {
+                        setIsCold(true);
+                        setIsWarm(false);
+                        setValue('option', 'Холодное');
+                    }}
                     className={`border-2 rounded-xl sm:rounded-2xl p-3 sm:p-5 cursor-pointer transition-all duration-300 ${
                         isCold
                             ? 'border-blue-400 bg-blue-50 shadow-lg'
-                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                            : errors.option
+                                ? 'border-red-300 hover:border-red-400 hover:bg-red-50'
+                                : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                     }`}
                 >
                     <div className="flex items-center justify-between">
@@ -77,11 +114,17 @@ return (
 
                 {/* Warm Option */}
                 <div
-                    onClick={() => setIsWarm(!isWarm)}
+                    onClick={() => {
+                        setIsWarm(true);
+                        setIsCold(false);
+                        setValue('option', 'Теплое');
+                    }}
                     className={`border-2 rounded-xl sm:rounded-2xl p-3 sm:p-5 cursor-pointer transition-all duration-300 ${
                         isWarm
                             ? 'border-orange-400 bg-orange-50 shadow-lg'
-                            : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50'
+                            : errors.option
+                                ? 'border-red-300 hover:border-red-400 hover:bg-red-50'
+                                : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50'
                     }`}
                 >
                     <div className="flex items-center justify-between">
@@ -108,6 +151,12 @@ return (
                         </div>
                     </div>
                 </div>
+
+                {errors.option && (
+                    <p className="mt-2 text-sm text-red-500 text-center">
+                        {errors.option.message}
+                    </p>
+                )}
             </div>
         </div>
     );
