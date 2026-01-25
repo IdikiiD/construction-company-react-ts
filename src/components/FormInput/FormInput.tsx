@@ -1,24 +1,75 @@
-export const FormInput = () => (
-    <div className="inset-0  bg-opacity-50 flex items-center justify-center  ">
-        <div className="bg-white rounded-lg p-10 w-full max-w-md mx-4 ">
-            <h2 className="text-xl font-bold mb-4 text-center">Запишитесь сегодня на <br/><span className='text-2xl'>Бесплатный замер</span>
+import {useForm} from "react-hook-form";
+import type {FormValues} from "../../types/TabType.ts";
+import {useServerPost} from "../../hooks/UseServerPost";
+
+
+export const FormInput = () => {
+    const {register, handleSubmit, formState: {errors}, reset} = useForm<FormValues>();
+    const {onSubmit, loading, error} = useServerPost(() => {
+
+        reset();
+    });
+
+    return (
+        <div className="bg-white p-8 rounded-lg shadow-lg">
+            <h3 className="text-lg font-semibold mb-2 text-center text-gray-700">
+                Запишитесь сегодня на
+            </h3>
+            <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-900">
+                БЕСПЛАТНЫЙ ЗАМЕР
             </h2>
-            <form className="space-y-4 flex flex-col justify-center align-center gap-3">
-                <div>
-                    <input type="text" className="w-full h-16 px-4 border border-gray-300 rounded-md text-center hover:border-blue-400 focus:border-blue-500  outline-none transition-colors duration-300"
-                           placeholder="Введите ваше имя"/>
-                </div>
-                <div>
-                    <input type="tel"
-                           className="w-full h-16 px-4 border border-gray-300 rounded-md text-center hover:border-blue-400 focus:border-blue-500  outline-none transition-colors duration-300"
-                           placeholder="Введите ваш телефон"/>
-                </div>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <input
+                    {...register('name', {
+                        required: 'Введите ваше имя',
+                        minLength: {value: 2, message: 'Минимум 2 символа'}
+                    })}
+                    type="text"
+                    placeholder="Введите ваше имя"
+                    className={`w-full p-4 border rounded-lg focus:outline-none ${
+                        errors.name ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                    }`}
+                />
+                {errors.name && (
+                    <p className="text-red-500 text-sm">{errors.name.message}</p>
+                )}
 
-                <button type="submit" className=" w-full h-20  bg-yellow-500 text-white px-4 py-2 rounded">Отправить</button>
-                <h6 className="text-xs font-bold mb-4 text-gray-400 text-center">Ваши данные конфиденциальны</h6>
+                <input
+                    {...register('phone', {
+                        required: 'Введите телефон',
+                        pattern: {
+                            value: /^[\d\s\+\-\(\)]+$/,
+                            message: 'Неверный формат телефона'
+                        }
+                    })}
+                    type="tel"
+                    placeholder="Введите телефон"
+                    className={`w-full p-4 border rounded-lg focus:outline-none ${
+                        errors.phone ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'
+                    }`}
+                />
+                {errors.phone && (
+                    <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                )}
 
+                {error && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                        Произошла ошибка. Попробуйте еще раз.
+                    </div>
+                )}
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-5 px-6 rounded-lg uppercase transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {loading ? 'ОТПРАВКА...' : 'ВЫЗВАТЬ ЗАМЕРЩИКА!'}
+                </button>
+
+                <p className="text-xs text-gray-500 text-center mt-3">
+                    Ваши данные конфиденциальны
+                </p>
             </form>
         </div>
-    </div>
-)
-
+    );
+};
