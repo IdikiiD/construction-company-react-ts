@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {images} from "../../data/imageData";
-import type {ImageType} from "../../../types/imageType.ts";
+import type {ImageType} from "../../types/imageType.ts";
 
 export const Works = () => {
     const [selectedImage, setSelectedImage] = useState<ImageType  | null>(null);

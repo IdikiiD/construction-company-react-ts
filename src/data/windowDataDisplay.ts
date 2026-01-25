@@ -1,4 +1,4 @@
-import type {WindowType} from "../../types/windowType.ts";
+import type {WindowType} from "../types/windowType.ts";
 
 export const windowDataDisplay: WindowType[] = [
     {
