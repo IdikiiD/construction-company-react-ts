@@ -1,8 +1,9 @@
-import {saleData} from "../../data/saleData.ts";
-import type {SaleType} from "../../../types/saleType.ts";
+import {useMobile} from "../../hooks/UseMobile";
+import {useCarousel} from "../../hooks/UseCarousel";
+import {saleData} from "../../data/saleData";
+import {SaleType} from "../../types/saleType";
+import {FormInput} from "../../components/FormInput/FormInput";
 
-import {useCarousel} from "../../hooks/UseCarousel.ts";
-import {useMobile} from "../../hooks/UseMobile.ts";
 
 export const Sale = () => {
 
@@ -135,36 +136,7 @@ export const Sale = () => {
 
                     {/* Правая колонка: форма */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-lg shadow-lg">
-                            <h3 className="text-lg font-bold mb-2 text-center">
-                                Запишитесь сегодня на
-                            </h3>
-                            <h2 className="text-2xl font-extrabold mb-6 text-center">
-                                БЕСПЛАТНЫЙ ЗАМЕР
-                            </h2>
-                            <form className="space-y-4">
-                                <input
-                                    type="text"
-                                    placeholder="Введите ваше имя"
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                />
-                                <input
-                                    type="tel"
-                                    placeholder="Введите телефон"
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                />
-                                <button
-                                    type="submit"
-                                    className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-6 rounded-lg uppercase transition-colors shadow-md"
-
-                                >
-                                    ВЫЗВАТЬ ЗАМЕРЩИКА!
-                                </button>
-                                <p className="text-xs text-gray-500 text-center mt-2">
-                                    Ваши данные конфиденциальны
-                                </p>
-                            </form>
-                        </div>
+                        <FormInput/>
                     </div>
                 </div>
             </div>
