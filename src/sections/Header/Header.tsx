@@ -1,7 +1,10 @@
-import logo from '../../img/header/logo.png'
-import {handleSubmit} from "../../utils/handleSubmit.ts";
+
+
+import logo from '@/img/header/logo.png';
 import {useState} from "react";
-import {TabsNumber} from "../../components/Modal/Modal.tsx";
+import {FormInput} from "../../components/FormInput/FormInput";
+
+
 
 export const Header = () => {
     const [showTabs, setShowTabs] = useState<boolean>(false);
@@ -49,10 +52,7 @@ export const Header = () => {
             <div className="fixed inset-0 z-50 flex items-center justify-center">
                 <div className="absolute inset-0 bg-black/50" onClick={() => setShowTabs(false)}/>
                 <div className="relative z-10">
-                    <TabsNumber onClose={() => setShowTabs(false)}  onClick={() => {
-                        handleSubmit();
-                        setShowTabs(false)
-                    }}/>
+                   <FormInput/>
                 </div>
             </div>
         )}
