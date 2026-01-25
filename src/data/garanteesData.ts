@@ -1,5 +1,5 @@
 
-import type {ExtendedImageType} from "../../types/imageGuaranteesType.ts";
+import type {ExtendedImageType} from "../types/imageGuaranteesType.ts";
 
 export const images: ExtendedImageType[] = [
     { id: '1', src: 'src/img/guarantees/1.png', alt: 'Photo 1',title:'Высокое качество' },
