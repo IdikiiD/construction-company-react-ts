@@ -1,4 +1,4 @@
-import type {ImageType} from "../../types/imageType.ts";
+import type {ImageType} from "../types/imageType.ts";
 
 export const images: ImageType[] = [
     { id: '1', src: 'src/img/our_works/1.png', alt: 'Photo 1' },
