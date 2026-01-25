@@ -1,3 +1,6 @@
+import {FormInput} from "../../components/FormInput/FormInput";
+
+
 export const Promo = () => {
     return (
         <div className="min-h-[70vh] bg-[url('/img/sale/bg.jpg')] bg-cover bg-center py-12">
@@ -57,35 +60,7 @@ export const Promo = () => {
 
                     {/* Правая колонка: Форма */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white p-8 rounded-lg shadow-lg">
-                            <h3 className="text-lg font-semibold mb-2 text-center text-gray-700">
-                                Запишитесь сегодня на
-                            </h3>
-                            <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-900">
-                                БЕСПЛАТНЫЙ ЗАМЕР
-                            </h2>
-                            <form className="space-y-4">
-                                <input
-                                    type="text"
-                                    placeholder="Введите ваше имя"
-                                    className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                />
-                                <input
-                                    type="tel"
-                                    placeholder="Введите телефон"
-                                    className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                />
-                                <button
-                                    type="submit"
-                                    className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-5 px-6 rounded-lg uppercase transition-colors shadow-md"
-                                >
-                                    ВЫЗВАТЬ ЗАМЕРЩИКА!
-                                </button>
-                                <p className="text-xs text-gray-500 text-center mt-3">
-                                    Ваши данные конфиденциальны
-                                </p>
-                            </form>
-                        </div>
+                    <FormInput/>
                     </div>
                 </div>
             </div>
