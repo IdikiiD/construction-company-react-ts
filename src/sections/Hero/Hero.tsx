@@ -1,4 +1,5 @@
-import {FormInput} from "../../components/FormInput/FormInput.tsx";
+import {FormInput} from "../../components/FormInput/FormInput";
+
 
 export const Hero = () => (
     <main className="min-h-[90vh] bg-[url('/img/main/bg.png')] bg-cover bg-center ">
