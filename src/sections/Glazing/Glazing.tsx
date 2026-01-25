@@ -1,11 +1,10 @@
 import {glazingTypes} from "../../data/glazingTypes";
-import type {GlazingType} from "../../../types/glazingType.ts";
+import type {GlazingType} from "../../types/glazingType.ts";
 import {useState} from "react";
-import {Tabs} from "../Tabs/Tabs.tsx";
-import {handleSubmit} from "../../utils/handleSubmit.ts";
+import {useMobile} from "../../hooks/UseMobile";
+import {useCarousel} from "../../hooks/UseCarousel";
+import {Tabs} from "../Tabs/Tabs";
 
-import {useCarousel} from "../../hooks/UseCarousel.ts";
-import {useMobile} from "../../hooks/UseMobile.ts";
 
 
 export const Glazing = () => {
@@ -89,7 +88,7 @@ export const Glazing = () => {
                                     isMobile ? "snap-center" : ""
                                 } ${
                                     activeCard === index
-                                        ? "bg-blue-50 shadow-lg scale-105 border-2 border-blue-400"
+                                        ? "bg-blue-50 shadow-lg scale-105 border-2 "
                                         : "bg-white hover:bg-gray-50 hover:shadow-md border-2 border-transparent"
                                 }`}
                                 style={{
@@ -133,7 +132,7 @@ export const Glazing = () => {
 
                 {/* Табы с вариантами остекления */}
                 <div className={`grid gap-6 ${
-                    // Подсчитываем сколько вариантов доступно
+                   
                     availableVariants.length === 1
                         ? 'grid-cols-1 max-w-2xl mx-auto'
                         : availableVariants.length === 2
@@ -430,10 +429,10 @@ export const Glazing = () => {
                     <div className="fixed inset-0 z-50 flex items-center justify-center">
                         <div className="absolute inset-0 bg-black/50" onClick={() => setShowTabs(false)}/>
                         <div className="relative z-10">
-                            <Tabs onClose={() => setShowTabs(false)} index={'1'} onClick={() => {
-                                handleSubmit();
-                                setShowTabs(false)
-                            }}/>
+                            <Tabs
+                                onClose={() => setShowTabs(false)}
+                                index={'1'}
+                            />
                         </div>
                     </div>
                 )}
